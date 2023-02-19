@@ -1,83 +1,23 @@
-#include <iostream>
-#include <winsock2.h>
-#pragma comment(lib, "ws2_32.lib")
-int main()
-{
-    // Winsock 라이브러리 초기화
-    WSADATA wsaData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    {
-        std::cout << "Winsock initialization failed!" << std::endl;
-        return 1;
-    }
-
-    // 소켓 생성
-    SOCKET listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (listenSocket == INVALID_SOCKET)
-    {
-        std::cout << "Socket creation failed!" << std::endl;
-        WSACleanup();
-        return 1;
-    }
-
-    // 소켓 주소 설정
-    sockaddr_in addr;
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(8080);
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-    // 소켓 바인딩
-    if (bind(listenSocket, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
-    {
-        std::cout << "Socket binding failed!" << std::endl;
-        closesocket(listenSocket);
-        WSACleanup();
-        return 1;
-    }
-
-    // 소켓 리슨
-    if (listen(listenSocket, SOMAXCONN) == SOCKET_ERROR)
-    {
-        std::cout << "Socket listening failed!" << std::endl;
-        closesocket(listenSocket);
-        WSACleanup();
-        return 1;
-    }
-
-    // 클라이언트 연결 대기
-    std::cout << "Waiting for a client connection..." << std::endl;
-    SOCKET clientSocket = accept(listenSocket, NULL, NULL);
-    if (clientSocket == INVALID_SOCKET)
-    {
-        std::cout << "Client connection failed!" << std::endl;
-        closesocket(listenSocket);
-        WSACleanup();
-        return 1;
-    }
-    std::cout << "Client connected!" << std::endl;
-
-    // 메시지 전송
-    char buffer[1024];
-    int len;
-    while (true)
-    {
-        std::cout << "Enter a message to send: ";
-        std::cin.getline(buffer, 1024);
-        len = strlen(buffer);
-        if (send(clientSocket, buffer, len, 0) == SOCKET_ERROR)
-        {
-            std::cout << "Message sending failed!" << std::endl;
-            closesocket(clientSocket);
-            WSACleanup();
-            return 1;
-        }
-    }
-
-    // 소켓 종료
-    closesocket(clientSocket);
-    closesocket(listenSocket);
-    WSACleanup();
-
-
-    return 0;
-}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>My test page</title>
+  </head>
+  <body>
+      <header>
+  <div class="logo">
+    <a href="#">My Logo</a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+      
+  </body>
+</html>
